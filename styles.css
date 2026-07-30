@@ -81,7 +81,7 @@ h2 { margin: 0 0 14px; }
   color: rgba(255,255,255,.83);
 }
 
-/* Kompakte Sound-Ansicht ohne rechteckige Kachel */
+/* Minimalistische Sound-Ansicht ohne sichtbare rechteckige Karte */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -100,7 +100,7 @@ h2 { margin: 0 0 14px; }
 }
 .favorite {
   position: absolute;
-  top: 4px;
+  top: 0;
   right: calc(50% - 80px);
   width: 38px;
   height: 38px;
@@ -120,7 +120,7 @@ h2 { margin: 0 0 14px; }
   justify-content: center;
   width: 156px;
   height: 156px;
-  margin: 0 auto 14px;
+  margin: 0 auto 10px;
   border: 0;
   border-radius: 999px;
   overflow: hidden;
@@ -133,18 +133,19 @@ h2 { margin: 0 0 14px; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center center;
   display: block;
-  transform: scale(1.03);
+  transform: scale(1.45);
+  transform-origin: center center;
 }
 .sound-button.playing {
   transform: translateY(8px) scale(1.035);
   box-shadow: 0 5px 0 rgba(2,6,23,.9), 0 0 34px rgba(103,232,249,.42);
 }
 .sound-title { margin: 0; text-align: center; font-weight: 850; line-height: 1.15; }
-.sound-category { margin: 5px 0 0; text-align: center; color: rgba(255,255,255,.45); font-size: 12px; }
+.sound-category { margin: 4px 0 0; text-align: center; color: rgba(255,255,255,.45); font-size: 12px; }
 .controls {
-  margin-top: 10px;
+  margin-top: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,11 +200,45 @@ h2 { margin: 0 0 14px; }
 .selection-item button { border: 0; border-radius: 999px; padding: 7px 10px; background: rgba(255,255,255,.1); color: white; cursor: pointer; }
 .panel-actions { display: grid; gap: 10px; }
 .primary, .secondary { border-radius: 16px; padding: 13px 14px; font-weight: 800; }
+
+/* Admin-Seite bleibt kompatibel */
+.admin-card {
+  width: min(560px, 100%);
+  border: 1px solid var(--soft);
+  border-radius: 28px;
+  padding: 18px;
+  background: #0f172a;
+  box-shadow: 0 24px 90px rgba(0,0,0,.45);
+  margin: 18px auto;
+}
+.admin-form {
+  display: grid;
+  gap: 12px;
+}
+.admin-form input {
+  width: 100%;
+  border: 1px solid var(--soft);
+  border-radius: 18px;
+  padding: 14px 15px;
+  outline: none;
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+}
+.full { width: 100%; border-radius: 16px; padding: 14px; }
+.link-button {
+  border-radius: 999px;
+  padding: 11px 14px;
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  text-decoration: none;
+}
+.muted { color: var(--muted); }
+
 @media (max-width: 560px) {
   .topbar { flex-direction: column; }
-  .selection-button { width: 100%; }
+  .selection-button, .link-button { width: 100%; text-align: center; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
-  .card { min-height: 216px; }
+  .card { min-height: 210px; }
   .sound-button { width: 132px; height: 132px; }
   .favorite { right: calc(50% - 68px); }
   .stop, .loop-toggle { padding: 7px 10px; font-size: 13px; }
