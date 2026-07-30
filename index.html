@@ -15,22 +15,16 @@
       </div>
       <button id="selectionButton" class="selection-button" type="button">Meine Auswahl <span id="selectionCount">0</span></button>
     </header>
-
     <section class="tools" aria-label="Sound suchen und filtern">
       <input id="search" class="search" type="search" placeholder="Sounds suchen..." autocomplete="off" />
       <div id="categories" class="chips"></div>
     </section>
-
     <section id="boardNotice" class="board-notice hidden"></section>
     <section id="grid" class="grid" aria-label="Sounds"></section>
   </main>
-
   <aside id="selectionPanel" class="panel hidden" aria-label="Meine Auswahl">
     <div class="panel-card">
-      <div class="panel-head">
-        <h2>Meine Auswahl</h2>
-        <button id="closePanel" class="icon-button" type="button" aria-label="Schließen">×</button>
-      </div>
+      <div class="panel-head"><h2>Meine Auswahl</h2><button id="closePanel" class="icon-button" type="button">×</button></div>
       <div id="selectionList" class="selection-list"></div>
       <div class="panel-actions">
         <button id="copyBoardLink" class="primary" type="button">Board-Link kopieren</button>
@@ -39,7 +33,8 @@
       <p id="copyHint" class="hint"></p>
     </div>
   </aside>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

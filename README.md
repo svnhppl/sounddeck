@@ -1,35 +1,48 @@
-# SoundDeck V2.1 - Favoriten und Board-Link
+# SoundDeck V2.2 Admin-Light
 
-Diese Version ist der nächste minimalistische Schritt für die echte Seite:
+Diese Version ergänzt eine einfache Admin-Oberfläche:
 
-- Alle Sounds bleiben direkt sichtbar
-- Nutzer können Sounds favorisieren
-- Oben erscheint „Meine Auswahl“ mit Zähler
-- Aus Favoriten kann ein teilbarer Board-Link erzeugt werden
-- Die Auswahl wird lokal im Browser gespeichert
-- Keine Anmeldung notwendig
-- Keine JSON-Bearbeitung durch Nutzer
+- öffentliche Seite liest Sounds aus Supabase, falls `config.js` ausgefüllt ist
+- Fallback auf `data/sounds.json`, falls Supabase noch nicht verbunden ist
+- `/admin.html` mit PIN
+- Sound hochladen
+- Bild hochladen
+- Eintrag in Tabelle `sounds` speichern
+- Sound löschen
 
-## Upload in GitHub
+## Dateien in GitHub ersetzen/ergänzen
 
-Diese Dateien ersetzen die vorhandenen Dateien im Repository:
+Diese Dateien ins Repository `sounddeck` hochladen:
 
 - index.html
+- admin.html
 - styles.css
 - app.js
+- admin.js
+- config.js
 - data/sounds.json
+- supabase-storage-policies.sql
 
-Danach aktualisiert Vercel die Seite automatisch.
+## Danach config.js bearbeiten
 
-## Hinweis
+In `config.js` eintragen:
 
-Die Bild- und Sounddateien werden weiterhin im Hauptverzeichnis erwartet:
+```js
+SUPABASE_URL: "deine Project URL",
+SUPABASE_PUBLISHABLE_KEY: "dein Publishable Key",
+ADMIN_PIN: "deine eigene PIN"
+```
 
-- boom.svg
-- boom.wav
-- airhorn.svg
-- airhorn.wav
-- laugh.svg
-- laugh.wav
+## Supabase Storage Policies
 
-Wenn weitere Sounds vorhanden sind, können sie später in data/sounds.json ergänzt werden.
+Den Inhalt aus `supabase-storage-policies.sql` im Supabase SQL Editor ausführen.
+
+## Aufrufen
+
+Öffentliche Seite:
+
+`/`
+
+Admin:
+
+`/admin.html`

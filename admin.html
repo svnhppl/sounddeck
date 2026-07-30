@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SoundDeck Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app admin-app">
+    <header class="topbar">
+      <div><p class="kicker">SoundDeck</p><h1>Admin</h1></div>
+      <a class="link-button" href="index.html">Zur Seite</a>
+    </header>
+
+    <section id="pinGate" class="admin-card">
+      <h2>Admin öffnen</h2>
+      <p class="muted">PIN eingeben</p>
+      <input id="pinInput" class="search" type="password" placeholder="PIN" />
+      <button id="pinButton" class="primary full" type="button">Öffnen</button>
+      <p id="pinHint" class="hint"></p>
+    </section>
+
+    <section id="adminPanel" class="hidden">
+      <section class="admin-card">
+        <h2>Sound hinzufügen</h2>
+        <form id="uploadForm" class="admin-form">
+          <label>Name<input id="name" required /></label>
+          <label>Kategorie<input id="category" required /></label>
+          <label>Bild<input id="imageFile" type="file" accept="image/*" required /></label>
+          <label>Sound<input id="audioFile" type="file" accept="audio/*" required /></label>
+          <button class="primary full" type="submit">Speichern</button>
+        </form>
+        <p id="uploadStatus" class="hint"></p>
+      </section>
+
+      <section class="admin-card">
+        <h2>Vorhandene Sounds</h2>
+        <div id="adminList" class="selection-list"></div>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
