@@ -1,69 +1,78 @@
 const state = {
   sounds: [],
-  boards: [],
-  selectedBoard: 'all',
-  selectedCategory: 'Alle',
+  category: 'Alle',
   search: '',
-  players: new Map()
+  favorites: new Set(JSON.parse(localStorage.getItem('sounddeck:favorites') || '[]')),
+  players: new Map(),
+  boardMode: false,
+  boardIds: []
 };
 
 const grid = document.querySelector('#grid');
 const categoriesEl = document.querySelector('#categories');
-const boardsEl = document.querySelector('#boards');
 const searchEl = document.querySelector('#search');
+const selectionButton = document.querySelector('#selectionButton');
+const selectionCount = document.querySelector('#selectionCount');
+const panel = document.querySelector('#selectionPanel');
+const closePanel = document.querySelector('#closePanel');
+const selectionList = document.querySelector('#selectionList');
+const clearSelection = document.querySelector('#clearSelection');
+const copyBoardLink = document.querySelector('#copyBoardLink');
+const copyHint = document.querySelector('#copyHint');
+const boardNotice = document.querySelector('#boardNotice');
 
 async function boot() {
+  const params = new URLSearchParams(location.search);
+  const board = params.get('board');
+  if (board) {
+    state.boardMode = true;
+    state.boardIds = board.split(',').map(x => x.trim()).filter(Boolean);
+  }
+
   const response = await fetch('data/sounds.json');
   const data = await response.json();
-  state.sounds = data.sounds;
-  state.boards = data.boards;
-  renderBoards();
+  state.sounds = data.sounds || [];
   renderCategories();
   renderSounds();
+  renderSelectionCount();
+  renderBoardNotice();
 }
 
-function filteredSounds() {
+function saveFavorites() {
+  localStorage.setItem('sounddeck:favorites', JSON.stringify([...state.favorites]));
+}
+
+function visibleSounds() {
   const q = state.search.trim().toLowerCase();
   return state.sounds.filter(sound => {
-    const boardMatch = state.selectedBoard === 'all' || sound.boards.includes(state.selectedBoard);
-    const catMatch = state.selectedCategory === 'Alle' || sound.category === state.selectedCategory;
+    const boardMatch = !state.boardMode || state.boardIds.includes(sound.id);
+    const categoryMatch = state.category === 'Alle' || sound.category === state.category;
     const searchMatch = !q || sound.title.toLowerCase().includes(q) || sound.category.toLowerCase().includes(q);
-    return boardMatch && catMatch && searchMatch;
+    return boardMatch && categoryMatch && searchMatch;
   });
 }
 
-function renderBoards() {
-  boardsEl.innerHTML = '';
-  state.boards.forEach(board => {
-    const count = board.id === 'all'
-      ? state.sounds.length
-      : state.sounds.filter(sound => sound.boards.includes(board.id)).length;
-    const btn = document.createElement('button');
-    btn.className = `board ${state.selectedBoard === board.id ? 'active' : ''}`;
-    btn.type = 'button';
-    btn.innerHTML = `<strong>${board.name}</strong><br><small>${count} Sounds</small>`;
-    btn.addEventListener('click', () => {
-      state.selectedBoard = board.id;
-      renderBoards();
-      renderCategories();
-      renderSounds();
-    });
-    boardsEl.appendChild(btn);
-  });
+function renderBoardNotice() {
+  if (!state.boardMode) {
+    boardNotice.classList.add('hidden');
+    return;
+  }
+  boardNotice.classList.remove('hidden');
+  boardNotice.textContent = `Geteiltes Board mit ${state.boardIds.length} Sound${state.boardIds.length === 1 ? '' : 's'}.`;
 }
 
 function renderCategories() {
-  const boardSounds = state.sounds.filter(sound => state.selectedBoard === 'all' || sound.boards.includes(state.selectedBoard));
-  const categories = ['Alle', ...Array.from(new Set(boardSounds.map(sound => sound.category))).sort()];
-  if (!categories.includes(state.selectedCategory)) state.selectedCategory = 'Alle';
+  const baseSounds = state.boardMode ? state.sounds.filter(s => state.boardIds.includes(s.id)) : state.sounds;
+  const categories = ['Alle', ...Array.from(new Set(baseSounds.map(sound => sound.category))).sort()];
+  if (!categories.includes(state.category)) state.category = 'Alle';
   categoriesEl.innerHTML = '';
   categories.forEach(category => {
     const btn = document.createElement('button');
-    btn.className = `chip ${state.selectedCategory === category ? 'active' : ''}`;
+    btn.className = `chip ${state.category === category ? 'active' : ''}`;
     btn.type = 'button';
     btn.textContent = category;
     btn.addEventListener('click', () => {
-      state.selectedCategory = category;
+      state.category = category;
       renderCategories();
       renderSounds();
     });
@@ -71,89 +80,135 @@ function renderCategories() {
   });
 }
 
-function getPlayer(sound) {
+function playerFor(sound) {
   if (!state.players.has(sound.id)) {
     const audio = new Audio(sound.soundUrl);
     audio.preload = 'auto';
-    audio.volume = sound.defaultVolume;
-    audio.loop = sound.defaultLoop;
-    state.players.set(sound.id, { audio, volume: sound.defaultVolume, loop: sound.defaultLoop, playing: false });
+    state.players.set(sound.id, { audio, playing: false });
   }
   return state.players.get(sound.id);
 }
 
 function renderSounds() {
-  const sounds = filteredSounds();
+  const sounds = visibleSounds();
   grid.innerHTML = '';
+
   if (sounds.length === 0) {
     grid.innerHTML = '<div class="empty">Keine Sounds gefunden.</div>';
     return;
   }
 
   sounds.forEach(sound => {
-    const player = getPlayer(sound);
+    const player = playerFor(sound);
     const card = document.createElement('article');
     card.className = 'card';
     card.innerHTML = `
+      <button class="favorite ${state.favorites.has(sound.id) ? 'active' : ''}" type="button" aria-label="${escapeHtml(sound.title)} favorisieren">★</button>
       <button class="sound-button ${player.playing ? 'playing' : ''}" type="button" aria-label="${escapeHtml(sound.title)} abspielen">
-        <img src="${sound.imageUrl}" alt="" draggable="false" />
+        <img src="${escapeHtml(sound.imageUrl)}" alt="" draggable="false" />
       </button>
-      <div class="meta">
-        <h3>${escapeHtml(sound.title)}</h3>
-        <p>${escapeHtml(sound.category)}</p>
-      </div>
-      <div class="controls">
-        <label>Lautstärke: <span class="volume-value">${Math.round(player.volume * 100)}%</span>
-          <input class="volume" type="range" min="0" max="1" step="0.05" value="${player.volume}" />
-        </label>
-        <div class="row">
-          <label><input class="loop" type="checkbox" ${player.loop ? 'checked' : ''} /> Loop</label>
-          <button class="stop" type="button">Stop</button>
-        </div>
-      </div>
+      <p class="sound-title">${escapeHtml(sound.title)}</p>
+      <p class="sound-category">${escapeHtml(sound.category)}</p>
+      <div class="controls"><button class="stop" type="button">Stop</button></div>
     `;
 
-    const playBtn = card.querySelector('.sound-button');
-    const volumeInput = card.querySelector('.volume');
-    const volumeValue = card.querySelector('.volume-value');
-    const loopInput = card.querySelector('.loop');
-    const stopBtn = card.querySelector('.stop');
+    const playButton = card.querySelector('.sound-button');
+    const favoriteButton = card.querySelector('.favorite');
+    const stopButton = card.querySelector('.stop');
 
     player.audio.onended = () => {
       player.playing = false;
       renderSounds();
     };
 
-    playBtn.addEventListener('click', async () => {
+    playButton.addEventListener('click', async () => {
       player.audio.currentTime = 0;
-      player.audio.volume = player.volume;
-      player.audio.loop = player.loop;
       await player.audio.play();
       player.playing = true;
       renderSounds();
     });
 
-    volumeInput.addEventListener('input', (event) => {
-      player.volume = Number(event.target.value);
-      player.audio.volume = player.volume;
-      volumeValue.textContent = `${Math.round(player.volume * 100)}%`;
-    });
-
-    loopInput.addEventListener('change', (event) => {
-      player.loop = event.target.checked;
-      player.audio.loop = player.loop;
-    });
-
-    stopBtn.addEventListener('click', () => {
+    stopButton.addEventListener('click', () => {
       player.audio.pause();
       player.audio.currentTime = 0;
       player.playing = false;
       renderSounds();
     });
 
+    favoriteButton.addEventListener('click', () => {
+      if (state.favorites.has(sound.id)) state.favorites.delete(sound.id);
+      else state.favorites.add(sound.id);
+      saveFavorites();
+      renderSelectionCount();
+      renderSounds();
+    });
+
     grid.appendChild(card);
   });
 }
+
+function renderSelectionCount() {
+  selectionCount.textContent = String(state.favorites.size);
+}
+
+function renderPanel() {
+  const selected = state.sounds.filter(sound => state.favorites.has(sound.id));
+  selectionList.innerHTML = '';
+  copyHint.textContent = '';
+
+  if (selected.length === 0) {
+    selectionList.innerHTML = '<div class="empty">Noch keine Sounds ausgewählt.</div>';
+    return;
+  }
+
+  selected.forEach(sound => {
+    const item = document.createElement('div');
+    item.className = 'selection-item';
+    item.innerHTML = `<span>${escapeHtml(sound.title)}</span><button type="button">Entfernen</button>`;
+    item.querySelector('button').addEventListener('click', () => {
+      state.favorites.delete(sound.id);
+      saveFavorites();
+      renderSelectionCount();
+      renderPanel();
+      renderSounds();
+    });
+    selectionList.appendChild(item);
+  });
+}
+
+selectionButton.addEventListener('click', () => {
+  panel.classList.remove('hidden');
+  renderPanel();
+});
+
+closePanel.addEventListener('click', () => panel.classList.add('hidden'));
+panel.addEventListener('click', event => {
+  if (event.target === panel) panel.classList.add('hidden');
+});
+
+clearSelection.addEventListener('click', () => {
+  state.favorites.clear();
+  saveFavorites();
+  renderSelectionCount();
+  renderPanel();
+  renderSounds();
+});
+
+copyBoardLink.addEventListener('click', async () => {
+  const ids = [...state.favorites];
+  if (ids.length === 0) {
+    copyHint.textContent = 'Wähle zuerst mindestens einen Sound aus.';
+    return;
+  }
+  const url = `${location.origin}${location.pathname}?board=${ids.join(',')}`;
+  await navigator.clipboard.writeText(url);
+  copyHint.textContent = 'Board-Link wurde kopiert.';
+});
+
+searchEl.addEventListener('input', event => {
+  state.search = event.target.value;
+  renderSounds();
+});
 
 function escapeHtml(value) {
   return String(value)
@@ -163,11 +218,6 @@ function escapeHtml(value) {
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
 }
-
-searchEl.addEventListener('input', (event) => {
-  state.search = event.target.value;
-  renderSounds();
-});
 
 boot().catch(error => {
   grid.innerHTML = `<div class="empty">Fehler beim Laden: ${escapeHtml(error.message)}</div>`;

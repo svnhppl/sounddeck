@@ -1,53 +1,35 @@
-# SoundDeck – GitHub Static MVP 1
+# SoundDeck V2.1 - Favoriten und Board-Link
 
-Diese Version ist bewusst ohne Backend, ohne Node.js lokal und ohne npm nutzbar.
-Sie ist für GitHub Pages gedacht und kann auch direkt lokal per Doppelklick auf `index.html` getestet werden.
+Diese Version ist der nächste minimalistische Schritt für die echte Seite:
 
-## Enthalten
+- Alle Sounds bleiben direkt sichtbar
+- Nutzer können Sounds favorisieren
+- Oben erscheint „Meine Auswahl“ mit Zähler
+- Aus Favoriten kann ein teilbarer Board-Link erzeugt werden
+- Die Auswahl wird lokal im Browser gespeichert
+- Keine Anmeldung notwendig
+- Keine JSON-Bearbeitung durch Nutzer
 
-- `index.html`
-- `styles.css`
-- `app.js`
-- `data/sounds.json`
-- lokale Demo-Sounds unter `assets/sounds/`
-- lokale Demo-Bilder unter `assets/images/`
-- GitHub-Pages-Workflow unter `.github/workflows/pages.yml`
+## Upload in GitHub
 
-## Lokal testen
+Diese Dateien ersetzen die vorhandenen Dateien im Repository:
 
-Einfach `index.html` im Browser öffnen.
+- index.html
+- styles.css
+- app.js
+- data/sounds.json
 
-Hinweis: Wenn ein Browser lokale Audiodateien blockiert, funktioniert es nach dem Upload auf GitHub Pages zuverlässig über HTTPS.
+Danach aktualisiert Vercel die Seite automatisch.
 
-## Auf GitHub veröffentlichen
+## Hinweis
 
-1. Neues Repository auf GitHub erstellen, zum Beispiel `sounddeck`.
-2. Den Inhalt dieser ZIP in das Repository hochladen.
-3. In GitHub öffnen: `Settings` → `Pages`.
-4. Bei `Build and deployment` als Source `GitHub Actions` auswählen.
-5. Danach einen Commit/Upload auf `main` machen. Der Workflow veröffentlicht die statische Seite.
+Die Bild- und Sounddateien werden weiterhin im Hauptverzeichnis erwartet:
 
-## Eigene Sounds hinzufügen
+- boom.svg
+- boom.wav
+- airhorn.svg
+- airhorn.wav
+- laugh.svg
+- laugh.wav
 
-1. Sounddatei nach `assets/sounds/` kopieren.
-2. Optional Bild nach `assets/images/` kopieren.
-3. `data/sounds.json` ergänzen.
-
-Beispiel:
-
-```json
-{
-  "id": "mein-sound",
-  "title": "Mein Sound",
-  "category": "Memes",
-  "soundUrl": "assets/sounds/mein-sound.wav",
-  "imageUrl": "assets/images/mein-bild.svg",
-  "defaultVolume": 1,
-  "defaultLoop": false,
-  "boards": ["memes"]
-}
-```
-
-## MVP-Grenze
-
-Diese Version enthält noch keinen Adminbereich, keinen Upload, keine Datenbank und kein Login. Das ist Absicht, damit der erste GitHub-Test möglichst einfach funktioniert.
+Wenn weitere Sounds vorhanden sind, können sie später in data/sounds.json ergänzt werden.

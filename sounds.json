@@ -1,94 +1,25 @@
 {
-  "boards": [
-    {
-      "id": "all",
-      "name": "Alle Sounds",
-      "description": "Alle verfügbaren Sounds."
-    },
-    {
-      "id": "memes",
-      "name": "Memes Board",
-      "description": "Kurze Sounds für schnelle Reaktionen."
-    },
-    {
-      "id": "live-show",
-      "name": "Live Show",
-      "description": "Sounds für Events, Moderation und Übergänge."
-    }
-  ],
   "sounds": [
     {
       "id": "boom",
       "title": "Boom",
       "category": "Memes",
-      "soundUrl": "assets/sounds/boom.wav",
-      "imageUrl": "assets/images/boom.svg",
-      "defaultVolume": 1,
-      "defaultLoop": false,
-      "boards": [
-        "memes",
-        "live-show"
-      ]
+      "soundUrl": "boom.wav",
+      "imageUrl": "boom.svg"
     },
     {
       "id": "airhorn",
       "title": "Airhorn",
       "category": "Streamer",
-      "soundUrl": "assets/sounds/airhorn.wav",
-      "imageUrl": "assets/images/airhorn.svg",
-      "defaultVolume": 0.9,
-      "defaultLoop": false,
-      "boards": [
-        "memes"
-      ]
+      "soundUrl": "airhorn.wav",
+      "imageUrl": "airhorn.svg"
     },
     {
       "id": "laugh",
       "title": "Laugh",
       "category": "Memes",
-      "soundUrl": "assets/sounds/laugh.wav",
-      "imageUrl": "assets/images/laugh.svg",
-      "defaultVolume": 0.8,
-      "defaultLoop": false,
-      "boards": [
-        "memes"
-      ]
-    },
-    {
-      "id": "applause",
-      "title": "Applause",
-      "category": "Events",
-      "soundUrl": "assets/sounds/applause.wav",
-      "imageUrl": "assets/images/applause.svg",
-      "defaultVolume": 0.75,
-      "defaultLoop": false,
-      "boards": [
-        "live-show"
-      ]
-    },
-    {
-      "id": "laser",
-      "title": "Laser",
-      "category": "Effekte",
-      "soundUrl": "assets/sounds/laser.wav",
-      "imageUrl": "assets/images/laser.svg",
-      "defaultVolume": 0.7,
-      "defaultLoop": false,
-      "boards": [
-        "live-show"
-      ]
-    },
-    {
-      "id": "glitch",
-      "title": "Glitch Beat",
-      "category": "Gaming",
-      "soundUrl": "assets/sounds/glitch.wav",
-      "imageUrl": "assets/images/glitch.svg",
-      "defaultVolume": 0.65,
-      "defaultLoop": true,
-      "boards": [
-        "live-show"
-      ]
+      "soundUrl": "laugh.wav",
+      "imageUrl": "laugh.svg"
     }
   ]
 }
