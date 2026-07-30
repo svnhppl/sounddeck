@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SoundDeck – MVP 1</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <p class="kicker">MVP 1</p>
+      <h1>SoundDeck</h1>
+      <p>Erstelle dein eigenes Soundboard-Gefühl: große Buttons, mehrere Sounds gleichzeitig, Loop, Stop und Lautstärke pro Button. Diese Version läuft statisch über GitHub Pages.</p>
+    </header>
+
+    <section class="toolbar" aria-label="Filter">
+      <input id="search" class="search" type="search" placeholder="Sounds suchen..." />
+      <div id="categories" class="chips" aria-label="Kategorien"></div>
+    </section>
+
+    <section class="layout">
+      <aside class="sidebar">
+        <h2>Boards</h2>
+        <div id="boards" class="board-list"></div>
+      </aside>
+      <section>
+        <div id="grid" class="grid"></div>
+      </section>
+    </section>
+
+    <footer>SoundDeck MVP 1 · statische GitHub-Version · keine Anmeldung · kein Backend</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
