@@ -1,48 +1,21 @@
-# SoundDeck V2.2 Admin-Light
+# SoundDeck V2.3 - Kompakt + Loop
 
-Diese Version ergänzt eine einfache Admin-Oberfläche:
+Diese Version setzt die drei gewünschten Änderungen um:
 
-- öffentliche Seite liest Sounds aus Supabase, falls `config.js` ausgefüllt ist
-- Fallback auf `data/sounds.json`, falls Supabase noch nicht verbunden ist
-- `/admin.html` mit PIN
-- Sound hochladen
-- Bild hochladen
-- Eintrag in Tabelle `sounds` speichern
-- Sound löschen
+1. Keine sichtbaren Kacheln mehr: Die rechteckigen Karten sind optisch entfernt.
+2. Bild füllt den runden Button vollständig aus: `object-fit: cover`, Bild wird also hochskaliert und bei Bedarf angeschnitten.
+3. Loop-Funktion auf der öffentlichen Seite: Jeder Sound hat einen kleinen Loop-Schalter.
 
-## Dateien in GitHub ersetzen/ergänzen
+## In GitHub ersetzen
 
-Diese Dateien ins Repository `sounddeck` hochladen:
+Diese Dateien ersetzen:
 
 - index.html
-- admin.html
 - styles.css
 - app.js
-- admin.js
-- config.js
-- data/sounds.json
-- supabase-storage-policies.sql
 
-## Danach config.js bearbeiten
+Wichtig: `config.js` NICHT ersetzen, wenn deine Supabase-Daten dort bereits korrekt eingetragen sind.
 
-In `config.js` eintragen:
+## Danach
 
-```js
-SUPABASE_URL: "deine Project URL",
-SUPABASE_PUBLISHABLE_KEY: "dein Publishable Key",
-ADMIN_PIN: "deine eigene PIN"
-```
-
-## Supabase Storage Policies
-
-Den Inhalt aus `supabase-storage-policies.sql` im Supabase SQL Editor ausführen.
-
-## Aufrufen
-
-Öffentliche Seite:
-
-`/`
-
-Admin:
-
-`/admin.html`
+Commit changes in GitHub. Vercel aktualisiert automatisch.
