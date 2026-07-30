@@ -1,5 +1,5 @@
 window.SOUNDDECK_CONFIG = {
-  SUPABASE_URL: https://rrcwigiekxvvkmbykygh.supabase.co,
+  SUPABASE_URL: "https://rrcwigiekxvvkmbykygh.supabase.co",
   SUPABASE_PUBLISHABLE_KEY: "HIER_PUBLISHABLE_KEY_EINFUEGEN",
   ADMIN_PIN: "1234"
 };
